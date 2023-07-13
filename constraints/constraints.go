@@ -20,18 +20,23 @@ type Float interface {
 	~float32 | ~float64
 }
 
-// Number is a constraint that permits any number type
-type Number interface {
+// Real is a constraint that permits any real numeric type.
+type Real interface {
 	Integer | Float
-}
-
-// Ordered is a constraint that permits any ordered type: any type
-// that supports the operators < <= >= >.
-type Ordered interface {
-	Number | ~string
 }
 
 // Complex is a constraint that permits any complex numeric type.
 type Complex interface {
 	~complex64 | ~complex128
+}
+
+// Numeric is a constraint that permits any numeric type.
+type Numeric interface {
+	Real | Complex
+}
+
+// Ordered is a constraint that permits any ordered type: any type
+// that supports the operators < <= >= >.
+type Ordered interface {
+	Numeric | ~string
 }
