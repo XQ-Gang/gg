@@ -10,6 +10,9 @@ func In[V comparable](s []V, v V) bool {
 }
 
 func Filter[V any](s []V, f func(V, int) bool) []V {
+	if s == nil {
+		return nil
+	}
 	res := make([]V, 0, len(s)/2)
 	for i, v := range s {
 		if f(v, i) {
@@ -20,6 +23,9 @@ func Filter[V any](s []V, f func(V, int) bool) []V {
 }
 
 func Map[V1, V2 any](s []V1, f func(V1, int) V2) []V2 {
+	if s == nil {
+		return nil
+	}
 	res := make([]V2, 0, len(s))
 	for i, v := range s {
 		res[i] = f(v, i)
@@ -28,6 +34,9 @@ func Map[V1, V2 any](s []V1, f func(V1, int) V2) []V2 {
 }
 
 func ToMap[V1, V2 any, K comparable](s []V1, f func(V1, int) (K, V2)) map[K]V2 {
+	if s == nil {
+		return nil
+	}
 	res := make(map[K]V2, len(s))
 	for i, v1 := range s {
 		k, v2 := f(v1, i)

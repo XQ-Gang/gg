@@ -1,6 +1,9 @@
 package gmap
 
 func Keys[K comparable, V any](m map[K]V) []K {
+	if m == nil {
+		return nil
+	}
 	res := make([]K, 0, len(m))
 	for k := range m {
 		res = append(res, k)
@@ -9,6 +12,9 @@ func Keys[K comparable, V any](m map[K]V) []K {
 }
 
 func Values[K comparable, V any](m map[K]V) []V {
+	if m == nil {
+		return nil
+	}
 	res := make([]V, 0, len(m))
 	for _, v := range m {
 		res = append(res, v)
@@ -24,6 +30,9 @@ func Get[K comparable, V any](m map[K]V, k K, def V) V {
 }
 
 func Filter[K comparable, V any](m map[K]V, f func(K, V) bool) map[K]V {
+	if m == nil {
+		return nil
+	}
 	res := make(map[K]V, len(m)/2)
 	for k, v := range m {
 		if f(k, v) {
@@ -34,6 +43,9 @@ func Filter[K comparable, V any](m map[K]V, f func(K, V) bool) map[K]V {
 }
 
 func Map[K1, K2 comparable, V1, V2 any](m map[K1]V1, f func(K1, V1) (K2, V2)) map[K2]V2 {
+	if m == nil {
+		return nil
+	}
 	res := make(map[K2]V2, len(m))
 	for k1, v1 := range m {
 		k2, v2 := f(k1, v1)
