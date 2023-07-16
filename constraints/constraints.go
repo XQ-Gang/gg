@@ -38,5 +38,5 @@ type Numeric interface {
 // Ordered is a constraint that permits any ordered type: any type
 // that supports the operators < <= >= >.
 type Ordered interface {
-	Numeric | ~string
+	Real | ~string
 }
