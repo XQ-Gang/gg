@@ -31,7 +31,7 @@ func Map[V1, V2 any](s []V1, f func(V1, int) V2) []V2 {
 	if s == nil {
 		return nil
 	}
-	res := make([]V2, 0, len(s))
+	res := make([]V2, len(s))
 	for i, v := range s {
 		res[i] = f(v, i)
 	}
