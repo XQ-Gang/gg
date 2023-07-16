@@ -1,5 +1,11 @@
 package gslice
 
+import (
+	"sort"
+
+	"github.com/XQ-Gang/gg/constraints"
+)
+
 // In returns true if the given value is in the given slice.
 func In[V comparable](s []V, v V) bool {
 	for _, _v := range s {
@@ -70,4 +76,11 @@ func Any[V any](s []V, f func(V, int) bool) bool {
 		}
 	}
 	return false
+}
+
+// Sort sorts the given slice in increasing order.
+func Sort[V constraints.Ordered](s []V) {
+	sort.Slice(s, func(i, j int) bool {
+		return s[i] < s[j]
+	})
 }
