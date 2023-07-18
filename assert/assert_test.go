@@ -13,3 +13,7 @@ func TestEq(t *testing.T) {
 	Eq(t, []*int{&a}, []*int{&b})
 	Eq(t, map[int]int{1: 1}, map[int]int{1: 1})
 }
+
+func TestPanic(t *testing.T) {
+	Panic(t, func() { panic("panic") })
+}

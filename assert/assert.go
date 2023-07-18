@@ -15,3 +15,13 @@ func Eq[T any](t *testing.T, expected, actual T) {
 			expected, actual)
 	}
 }
+
+func Panic(t *testing.T, f func()) {
+	t.Helper()
+	defer func() {
+		if recover() == nil {
+			t.Errorf("Expected panic, but got nothing.")
+		}
+	}()
+	f()
+}
