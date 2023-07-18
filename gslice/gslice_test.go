@@ -196,3 +196,32 @@ func TestSort(t *testing.T) {
 		})
 	}
 }
+
+func TestRange(t *testing.T) {
+	type args struct {
+		start int
+		end   int
+		step  int
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{"step=0", args{1, 4, 0}, []int{}},
+		{"start=end", args{1, 1, 1}, []int{}},
+		{"start<end&step<0", args{1, 4, -1}, []int{}},
+		{"start>end&step>0", args{4, 1, 1}, []int{}},
+		{"start<end&step=1", args{1, 4, 1}, []int{1, 2, 3}},
+		{"start<end&step=2", args{1, 4, 2}, []int{1, 3}},
+		{"start<end&step>(end-start)", args{1, 4, 5}, []int{1}},
+		{"start>end&step=-1", args{4, 1, -1}, []int{4, 3, 2}},
+		{"start>end&step=-2", args{4, 1, -2}, []int{4, 2}},
+		{"start>end&step<(start-end)", args{4, 1, -5}, []int{4}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			Eq(t, tt.want, Range(tt.args.start, tt.args.end, tt.args.step))
+		})
+	}
+}
