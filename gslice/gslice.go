@@ -165,3 +165,52 @@ func Range[T constraints.Real](start, end, step T) []T {
 	}
 	return res
 }
+
+// Head returns the first n elements of the given slice.
+// If n is negative, panic.
+// If n is greater than or equal to the length of the slice, the whole slice is returned.
+func Head[V any](s []V, n int) []V {
+	if n < 0 {
+		panic("n must be non-negative")
+	}
+	if n >= len(s) {
+		return s
+	}
+	return s[:n]
+}
+
+// Tail returns the last n elements of the given slice.
+// If n is negative, panic.
+// If n is greater than or equal to the length of the slice, the whole slice is returned.
+func Tail[V any](s []V, n int) []V {
+	if n < 0 {
+		panic("n must be non-negative")
+	}
+	if n >= len(s) {
+		return s
+	}
+	return s[len(s)-n:]
+}
+
+// Slice returns a slice of the given slice from start to end, excluding end.
+// Negative index is supported.
+// If start is greater than or equal to end, empty slice is returned.
+func Slice[V any](s []V, start, end int) []V {
+	if s == nil {
+		return nil
+	}
+	if start < -len(s) {
+		start = 0
+	} else if start < 0 {
+		start = len(s) + start
+	}
+	if end < 0 {
+		end = len(s) + end
+	} else if end >= len(s) {
+		end = len(s)
+	}
+	if end <= 0 || start >= end {
+		return []V{}
+	}
+	return s[start:end]
+}

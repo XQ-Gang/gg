@@ -369,3 +369,90 @@ func TestRange(t *testing.T) {
 		})
 	}
 }
+
+func TestHead(t *testing.T) {
+	type args struct {
+		s []int
+		n int
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{"nil", args{nil, 1}, nil},
+		{"empty", args{[]int{}, 1}, []int{}},
+		{"normal#n>len(s)", args{[]int{1, 2, 3}, 4}, []int{1, 2, 3}},
+		{"normal#n=len(s)", args{[]int{1, 2, 3}, 3}, []int{1, 2, 3}},
+		{"normal#n<len(s)", args{[]int{1, 2, 3}, 2}, []int{1, 2}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			Eq(t, tt.want, Head(tt.args.s, tt.args.n))
+		})
+	}
+
+	Panic(t, func() { Head([]int{1, 2, 3}, -1) })
+}
+
+func TestTail(t *testing.T) {
+	type args struct {
+		s []int
+		n int
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{"nil", args{nil, 1}, nil},
+		{"empty", args{[]int{}, 1}, []int{}},
+		{"normal#n>len(s)", args{[]int{1, 2, 3}, 4}, []int{1, 2, 3}},
+		{"normal#n=len(s)", args{[]int{1, 2, 3}, 3}, []int{1, 2, 3}},
+		{"normal#n<len(s)", args{[]int{1, 2, 3}, 2}, []int{2, 3}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			Eq(t, tt.want, Tail(tt.args.s, tt.args.n))
+		})
+	}
+
+	Panic(t, func() { Head([]int{1, 2, 3}, -1) })
+}
+
+func TestSlice(t *testing.T) {
+	type args struct {
+		s     []int
+		start int
+		end   int
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{"nil", args{nil, 0, 1}, nil},
+		{"empty", args{[]int{}, 0, 1}, []int{}},
+		{"start>end", args{[]int{1, 2, 3}, 2, 1}, []int{}},
+		{"start=end", args{[]int{1, 2, 3}, 1, 1}, []int{}},
+		{"start<end", args{[]int{1, 2, 3}, 1, 2}, []int{2}},
+		{"start<0&end<0", args{[]int{1, 2, 3}, -2, -1}, []int{2}},
+		{"start<0&end=0", args{[]int{1, 2, 3}, -2, 0}, []int{}},
+		{"start<0&end>0", args{[]int{1, 2, 3}, -2, 2}, []int{2}},
+		{"start>0&end<0", args{[]int{1, 2, 3}, 1, -1}, []int{2}},
+		{"start>0&end=0", args{[]int{1, 2, 3}, 1, 0}, []int{}},
+		{"start>0&end>0", args{[]int{1, 2, 3}, 1, 2}, []int{2}},
+		{"start=-len(s)", args{[]int{1, 2, 3}, -3, 2}, []int{1, 2}},
+		{"start<-len(s)", args{[]int{1, 2, 3}, -4, 2}, []int{1, 2}},
+		{"start>len(s)", args{[]int{1, 2, 3}, 4, 2}, []int{}},
+		{"end=len(s)", args{[]int{1, 2, 3}, 1, 3}, []int{2, 3}},
+		{"end<-len(s)", args{[]int{1, 2, 3}, 1, -4}, []int{}},
+		{"end>len(s)", args{[]int{1, 2, 3}, 1, 4}, []int{2, 3}},
+		{"start<-len(s)&end>len(s)", args{[]int{1, 2, 3}, -4, 4}, []int{1, 2, 3}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			Eq(t, tt.want, Slice(tt.args.s, tt.args.start, tt.args.end))
+		})
+	}
+}
