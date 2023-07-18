@@ -1,6 +1,7 @@
 package gslice
 
 import (
+	"math"
 	"sort"
 
 	"github.com/XQ-Gang/gg/gutil"
@@ -127,16 +128,19 @@ func Sort[V constraints.Ordered](s []V) {
 	})
 }
 
-func Range[T constraints.Integer](start, end T, step int) []T {
+// Range returns a slice of integers from start to end, excluding end.
+// If step is positive, the slice is in increasing order.
+// If step is negative, the slice is in decreasing order.
+// If step is zero, empty slice is returned.
+func Range[T constraints.Real](start, end, step T) []T {
 	if step == 0 || start == end || (start < end && step < 0) || (start > end && step > 0) {
 		return []T{}
 	}
-	asc := start < end && step > 0
-	stepT := T(step)
-	resLen := gutil.If(asc, (end-start+stepT-1)/stepT, gval.Abs((end-start+stepT+1)/stepT))
-	res := make([]T, resLen)
-	for i := start; gutil.If(asc, i < end, i > end); i += stepT {
-		res[(i-start)/stepT] = i
+	asc := start < end
+	resLen := int(math.Ceil(float64(end-start) / float64(step)))
+	res := make([]T, 0, resLen)
+	for i := start; gutil.If(asc, i < end, i > end); i += step {
+		res = append(res, i)
 	}
 	return res
 }
