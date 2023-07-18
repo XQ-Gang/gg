@@ -99,6 +99,33 @@ func TestMap(t *testing.T) {
 	}
 }
 
+func TestReduce(t *testing.T) {
+	type args struct {
+		s       []int
+		f       func(int, int, int) int
+		initial int
+	}
+	reduceFunc := func(agg int, val int, idx int) int { return agg + val + idx }
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{"nil", args{nil, reduceFunc, 0}, 0},
+		{"empty", args{[]int{}, reduceFunc, 0}, 0},
+		{"initial", args{[]int{}, reduceFunc, 1}, 1},
+		{"normal#initial0", args{[]int{1, 2, 3}, reduceFunc, 0}, 9},
+		{"normal#initial1", args{[]int{1, 2, 3}, reduceFunc, 1}, 10},
+		{"only_value", args{[]int{1, 2, 3}, func(agg int, val int, _ int) int { return agg + val }, 0}, 6},
+		{"only_index", args{[]int{1, 2, 3}, func(agg int, _ int, idx int) int { return agg + idx }, 0}, 3},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			Eq(t, tt.want, Reduce(tt.args.s, tt.args.f, tt.args.initial))
+		})
+	}
+}
+
 func TestToMap(t *testing.T) {
 	type args struct {
 		s []int

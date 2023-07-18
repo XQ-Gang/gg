@@ -53,6 +53,21 @@ func Map[V1, V2 any](s []V1, f func(V1, int) V2) []V2 {
 	return res
 }
 
+// Reduce apply the given function cumulatively to each element of the given slice, from left to right,
+// to reduce the slice to a single value. The initial value, if given, is used as the initial value.
+// If the initial value is not given, the zero value of the type of the result is used.
+// If the given slice is nil, the initial value is returned.
+func Reduce[V, T any](s []V, f func(T, V, int) T, initial ...T) T {
+	res := gval.Zero[T]()
+	if len(initial) > 0 {
+		res = initial[0]
+	}
+	for i, v := range s {
+		res = f(res, v, i)
+	}
+	return res
+}
+
 // ToMap returns a new map containing the results of applying the given function to each element.
 // If the given slice is nil, nil is returned.
 func ToMap[V1, V2 any, K comparable](s []V1, f func(V1, int) (K, V2)) map[K]V2 {
