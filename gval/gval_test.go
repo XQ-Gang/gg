@@ -19,3 +19,12 @@ func TestZero(t *testing.T) {
 	Eq(t, MyStruct{}, Zero[MyStruct]())
 	Eq(t, nil, Zero[*MyStruct]())
 }
+
+func TestAbs(t *testing.T) {
+	Eq(t, 0, Abs(0))
+	Eq(t, 1, Abs(1))
+	Eq(t, 1, Abs(-1))
+	Eq(t, 1.5, Abs(-1.5))
+	Eq(t, 1.5, Abs(1.5))
+	Eq(t, 8, Abs(uint(8)))
+}
