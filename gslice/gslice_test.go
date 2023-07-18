@@ -28,6 +28,27 @@ func TestIn(t *testing.T) {
 	}
 }
 
+func TestIndex(t *testing.T) {
+	type args struct {
+		s []int
+		v int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{"nil", args{nil, 1}, -1},
+		{"found", args{[]int{1, 2, 3}, 2}, 1},
+		{"not found", args{[]int{1, 2, 3}, 4}, -1},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			Eq(t, tt.want, Index(tt.args.s, tt.args.v))
+		})
+	}
+}
+
 func TestFilter(t *testing.T) {
 	type args struct {
 		s []int

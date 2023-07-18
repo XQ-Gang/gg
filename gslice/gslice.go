@@ -8,12 +8,18 @@ import (
 
 // In returns true if the given value is in the given slice.
 func In[V comparable](s []V, v V) bool {
-	for _, _v := range s {
+	return Index(s, v) != -1
+}
+
+// Index return the index of the given value in the given slice.
+// If the given value is not in the given slice, -1 is returned.
+func Index[V comparable](s []V, v V) int {
+	for i, _v := range s {
 		if v == _v {
-			return true
+			return i
 		}
 	}
-	return false
+	return -1
 }
 
 // Filter returns a new slice containing only the elements that pass the given predicate function.
