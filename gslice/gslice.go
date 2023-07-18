@@ -40,6 +40,12 @@ func Filter[V any](s []V, f func(V, int) bool) []V {
 	return res
 }
 
+// FilterV is a simplified version of Filter.
+// If we don't need the index, we can use FilterV instead of Filter.
+func FilterV[V any](s []V, f func(V) bool) []V {
+	return Filter(s, func(v V, _ int) bool { return f(v) })
+}
+
 // Map returns a new slice containing the results of applying the given function to each element.
 // If the given slice is nil, nil is returned.
 func Map[V1, V2 any](s []V1, f func(V1, int) V2) []V2 {
@@ -51,6 +57,12 @@ func Map[V1, V2 any](s []V1, f func(V1, int) V2) []V2 {
 		res[i] = f(v, i)
 	}
 	return res
+}
+
+// MapV is a simplified version of Map.
+// If we don't need the index, we can use MapV instead of Map.
+func MapV[V1, V2 any](s []V1, f func(V1) V2) []V2 {
+	return Map(s, func(v V1, _ int) V2 { return f(v) })
 }
 
 // Reduce apply the given function cumulatively to each element of the given slice, from left to right,
@@ -66,6 +78,12 @@ func Reduce[V, T any](s []V, f func(T, V, int) T, initial ...T) T {
 		res = f(res, v, i)
 	}
 	return res
+}
+
+// ReduceV is a simplified version of Reduce.
+// If we don't need the index, we can use ReduceV instead of Reduce.
+func ReduceV[V, T any](s []V, f func(T, V) T, initial ...T) T {
+	return Reduce(s, func(t T, v V, _ int) T { return f(t, v) }, initial...)
 }
 
 // ToMap returns a new map containing the results of applying the given function to each element.
