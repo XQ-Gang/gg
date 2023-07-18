@@ -197,6 +197,52 @@ func TestReduceV(t *testing.T) {
 	}
 }
 
+func TestFilterMap(t *testing.T) {
+	type args struct {
+		s []int
+		f func(int, int) (int, bool)
+	}
+	filterMapFunc := func(v int, i int) (int, bool) { return v + i, v%2 == 0 }
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{"nil", args{nil, filterMapFunc}, nil},
+		{"empty", args{[]int{}, filterMapFunc}, []int{}},
+		{"normal", args{[]int{1, 2, 3, 4, 5}, filterMapFunc}, []int{3, 7}},
+		{"only_value", args{[]int{1, 2, 3}, func(v int, _ int) (int, bool) { return v * 2, v%2 == 0 }}, []int{4}},
+		{"only_index", args{[]int{1, 2, 3}, func(_ int, i int) (int, bool) { return i * 2, i%2 == 0 }}, []int{0, 4}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			Eq(t, tt.want, FilterMap(tt.args.s, tt.args.f))
+		})
+	}
+}
+
+func TestFilterMapV(t *testing.T) {
+	type args struct {
+		s []int
+		f func(int) (int, bool)
+	}
+	filterMapFunc := func(v int) (int, bool) { return v + 1, v%2 == 0 }
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{"nil", args{nil, filterMapFunc}, nil},
+		{"empty", args{[]int{}, filterMapFunc}, []int{}},
+		{"normal", args{[]int{1, 2, 3, 4, 5}, filterMapFunc}, []int{3, 5}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			Eq(t, tt.want, FilterMapV(tt.args.s, tt.args.f))
+		})
+	}
+}
+
 func TestToMap(t *testing.T) {
 	type args struct {
 		s []int

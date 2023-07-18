@@ -87,6 +87,27 @@ func ReduceV[V, T any](s []V, f func(T, V) T, initial ...T) T {
 	return Reduce(s, func(t T, v V, _ int) T { return f(t, v) }, initial...)
 }
 
+// FilterMap returns a new slice containing the results of applying the given function to each element.
+// If the given slice is nil, nil is returned.
+func FilterMap[V1, V2 any](s []V1, f func(V1, int) (V2, bool)) []V2 {
+	if s == nil {
+		return nil
+	}
+	res := make([]V2, 0, len(s)/2)
+	for i, v := range s {
+		if _v, ok := f(v, i); ok {
+			res = append(res, _v)
+		}
+	}
+	return res
+}
+
+// FilterMapV is a simplified version of FilterMap.
+// If we don't need the index, we can use FilterMapV instead of FilterMap.
+func FilterMapV[V1, V2 any](s []V1, f func(V1) (V2, bool)) []V2 {
+	return FilterMap(s, func(v V1, _ int) (V2, bool) { return f(v) })
+}
+
 // ToMap returns a new map containing the results of applying the given function to each element.
 // If the given slice is nil, nil is returned.
 func ToMap[V1, V2 any, K comparable](s []V1, f func(V1, int) (K, V2)) map[K]V2 {
